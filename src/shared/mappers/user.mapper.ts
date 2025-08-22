@@ -1,5 +1,5 @@
 import { UserEntity } from '@domain/user/entities/user.entity';
-import { User } from '@/infrastructure/database/user/entities/user.schema';
+import { User } from '@/infrastructure/database/user/schemas/user.schema';
 
 export const mapUserSchemaToEntity = (
   data: User & { _id: any },

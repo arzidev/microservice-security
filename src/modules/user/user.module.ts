@@ -1,20 +1,17 @@
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from '@modules/database/database.module';
-import { UserRepository } from '@/infrastructure/database/user/repositories/user.repository';
-import { USER_REPOSITORY } from '@/domain/user/repositories/user.repository.interface';
 import { UserController } from '@/application/user/controllers/user.controller';
-import { GetUsersUseCase } from '@/domain/user/use-cases/get-users.use-case';
-import { CreateUserUseCase } from '@/domain/user/use-cases/create-user.use-case';
-import { UpdateUserUseCase } from '@/domain/user/use-cases/update-user.use-case';
+import { USER_REPOSITORY } from '@/domain/user/repositories/user.repository.interface';
+import { UserUseCases } from '@/domain/user/use-cases';
+import { UserRepository } from '@/infrastructure/database/user/repositories/user.repository';
+import { repositories } from '@/infrastructure/database/user/repositories';
 
 @Module({
   imports: [DatabaseModule],
   controllers: [UserController],
   providers: [
-    UserRepository,
-    GetUsersUseCase,
-    CreateUserUseCase,
-    UpdateUserUseCase,
+    ...repositories,
+    ...UserUseCases,
     {
       provide: USER_REPOSITORY,
       useClass: UserRepository,

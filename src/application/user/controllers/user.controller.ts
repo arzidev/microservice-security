@@ -1,9 +1,13 @@
-import { GetUsersUseCase } from '@/domain/user/use-cases/get-users.use-case';
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
-import { CreateUserUseCase } from '@/domain/user/use-cases/create-user.use-case';
 import { UpdateUserDto } from '../dto/update-user.dto';
-import { UpdateUserUseCase } from '@/domain/user/use-cases/update-user.use-case';
+import { ChangeStateUserDto } from '../dto/change-state-user.dto';
+import {
+  GetUsersUseCase,
+  CreateUserUseCase,
+  UpdateUserUseCase,
+  ChangeStateUserUseCase,
+} from '@domain/user/use-cases';
 
 @Controller('users')
 export class UserController {
@@ -11,6 +15,7 @@ export class UserController {
     private readonly getUsersUseCase: GetUsersUseCase,
     private readonly createUserUseCase: CreateUserUseCase,
     private readonly updateUserUseCase: UpdateUserUseCase,
+    private readonly changeStateUserUseCase: ChangeStateUserUseCase,
   ) {}
 
   @Get()
@@ -31,6 +36,12 @@ export class UserController {
     @Body() updateUserDto: UpdateUserDto,
   ) {
     const users = await this.updateUserUseCase.execute(id, updateUserDto);
+    return users;
+  }
+
+  @Patch(':id/change-state')
+  async changeState(@Param('id') id: string, @Body() body: ChangeStateUserDto) {
+    const users = await this.changeStateUserUseCase.execute(id, body);
     return users;
   }
 }
