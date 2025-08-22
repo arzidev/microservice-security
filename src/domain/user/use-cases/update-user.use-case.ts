@@ -3,31 +3,30 @@ import {
   USER_REPOSITORY,
   UserRepositoryInterface,
 } from '../repositories/user.repository.interface';
-import { CreateUserDto } from '@/application/user/dto/create-user.dto';
 import { GetUsersDto } from '@/application/user/dto/get-users.dto';
 import { UserEntity } from '../entities/user.entity';
 import { Response } from '@/shared/models/response.model';
 import { mapUserEntityToResponse } from '@/shared/mappers/user.mapper';
 import { GenericResponses } from '@/shared/generic-responses';
+import { UpdateUserDto } from '@/application/user/dto/update-user.dto';
 
 @Injectable()
-export class CreateUserUseCase {
+export class UpdateUserUseCase {
   constructor(
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepositoryInterface,
   ) {}
 
   async execute(
-    userData: CreateUserDto,
+    userId: string,
+    userData: UpdateUserDto,
   ): Promise<Response<GetUsersDto | void>> {
-    const newUser: UserEntity = {
+    const newData: Partial<UserEntity> = {
       username: userData.username,
       email: userData.email,
       role: userData.role,
-      state: userData.state,
-      password: userData.password,
     };
-    const inserted = await this.userRepository.insert(newUser);
+    const inserted = await this.userRepository.update(userId, newData);
     if (!inserted) {
       return GenericResponses.GENERIC_SAVE_FAILED();
     }

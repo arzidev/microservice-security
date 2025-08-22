@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from '@/infrastructure/database/user/entities/user.schema';
 import { UserEntity } from '@domain/user/entities/user.entity';
-import { mapUserToEntity } from '@shared/mappers/user.mapper';
+import { mapUserSchemaToEntity } from '@shared/mappers/user.mapper';
 import { UserRepositoryInterface } from '@/domain/user/repositories/user.repository.interface';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class UserRepository implements UserRepositoryInterface {
     try {
       const data = await this.userCollection.find().lean();
       return data.map((u) => {
-        return mapUserToEntity(u);
+        return mapUserSchemaToEntity(u);
       });
     } catch (error) {
       return [];
@@ -32,7 +32,7 @@ export class UserRepository implements UserRepositoryInterface {
       if (!userFound) {
         return null;
       }
-      return mapUserToEntity(userFound);
+      return mapUserSchemaToEntity(userFound);
     } catch (error) {
       throw new Error(error.stack);
     }
@@ -44,7 +44,7 @@ export class UserRepository implements UserRepositoryInterface {
       if (!userFound) {
         return null;
       }
-      return mapUserToEntity(userFound);
+      return mapUserSchemaToEntity(userFound);
     } catch (error) {
       throw new Error(error.stack);
     }
@@ -61,7 +61,30 @@ export class UserRepository implements UserRepositoryInterface {
       });
       console.log(userData);
       const saved = await newUser.save();
-      return mapUserToEntity(saved);
+      return mapUserSchemaToEntity(saved);
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+
+  async update(
+    userId: string,
+    userData: Partial<UserEntity>,
+  ): Promise<UserEntity | null> {
+    try {
+      const newUser = await this.userCollection
+        .findByIdAndUpdate(
+          userId,
+          {
+            $set: userData,
+          },
+          { new: true },
+        )
+        .exec();
+
+      if (!newUser) return null;
+      return mapUserSchemaToEntity(newUser);
     } catch (error) {
       console.log(error);
       return null;

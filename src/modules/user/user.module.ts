@@ -5,6 +5,7 @@ import { USER_REPOSITORY } from '@/domain/user/repositories/user.repository.inte
 import { UserController } from '@/application/user/controllers/user.controller';
 import { GetUsersUseCase } from '@/domain/user/use-cases/get-users.use-case';
 import { CreateUserUseCase } from '@/domain/user/use-cases/create-user.use-case';
+import { UpdateUserUseCase } from '@/domain/user/use-cases/update-user.use-case';
 
 @Module({
   imports: [DatabaseModule],
@@ -13,6 +14,7 @@ import { CreateUserUseCase } from '@/domain/user/use-cases/create-user.use-case'
     UserRepository,
     GetUsersUseCase,
     CreateUserUseCase,
+    UpdateUserUseCase,
     {
       provide: USER_REPOSITORY,
       useClass: UserRepository,
