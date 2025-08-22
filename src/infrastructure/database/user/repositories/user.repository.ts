@@ -5,6 +5,7 @@ import { User } from '@/infrastructure/database/user/schemas/user.schema';
 import { UserEntity } from '@domain/user/entities/user.entity';
 import { mapUserSchemaToEntity } from '@shared/mappers/user.mapper';
 import { UserRepositoryInterface } from '@/domain/user/repositories/user.repository.interface';
+import { QueryParamsDto } from '@/application/user/dto/query-params.dto';
 
 @Injectable()
 export class UserRepository implements UserRepositoryInterface {
@@ -24,17 +25,15 @@ export class UserRepository implements UserRepositoryInterface {
     }
   }
 
-  async getByEmail(userEmail: string): Promise<UserEntity | null> {
+  async search(filters: QueryParamsDto): Promise<UserEntity[]> {
     try {
-      const userFound = await this.userCollection
-        .findOne({ email: userEmail })
-        .lean();
-      if (!userFound) {
-        return null;
+      const usersFound = await this.userCollection.find(filters).exec();
+      if (usersFound.length == 0) {
+        return [];
       }
-      return mapUserSchemaToEntity(userFound);
+      return usersFound.map((e) => mapUserSchemaToEntity(e));
     } catch (error) {
-      throw new Error(error.stack);
+      return [];
     }
   }
 
