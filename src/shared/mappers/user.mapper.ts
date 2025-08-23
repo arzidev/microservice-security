@@ -11,6 +11,17 @@ export const mapUserSchemaToEntity = (
   state: data.state,
 });
 
+export const mapUserSchemaToEntityWitPassword = (
+  data: User & { _id: any },
+): UserEntity => ({
+  id: data._id.toString(),
+  email: data.email,
+  username: data.username,
+  role: data.role,
+  state: data.state,
+  password: data.password,
+});
+
 export const mapUserEntityToResponse = (data: UserEntity) => ({
   id: data.id ?? '',
   email: data.email,
