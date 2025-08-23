@@ -4,14 +4,18 @@ import { GetUsersUseCase } from './get-users.use-case';
 import { ChangeStateUserUseCase } from './change-state-user.use-case';
 import { FilterUsersUseCase } from './filter-users.use-case';
 import { GetUserByIdUseCase } from './get-user-by-id.use-case';
+import { GetUserByEmailUseCase } from './get-user-by-email.use-case';
+import { GetUserByUsernameUseCase } from './get-user-by-username.use-case';
 
-export const UserUseCases = [
+export const userUseCases = [
   CreateUserUseCase,
   UpdateUserUseCase,
   GetUsersUseCase,
   ChangeStateUserUseCase,
   FilterUsersUseCase,
   GetUserByIdUseCase,
+  GetUserByEmailUseCase,
+  GetUserByUsernameUseCase,
 ];
 
 // Si igual quieres, puedes exportar individuales:
@@ -22,4 +26,6 @@ export {
   ChangeStateUserUseCase,
   FilterUsersUseCase,
   GetUserByIdUseCase,
+  GetUserByEmailUseCase,
+  GetUserByUsernameUseCase,
 };

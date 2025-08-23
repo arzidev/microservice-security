@@ -3,7 +3,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from '@/infrastructure/database/user/schemas/user.schema';
 import { UserEntity } from '@domain/user/entities/user.entity';
-import { mapUserSchemaToEntity } from '@shared/mappers/user.mapper';
+import {
+  mapUserSchemaToEntity,
+  mapUserSchemaToEntityWitPassword,
+} from '@shared/mappers/user.mapper';
 import { UserRepositoryInterface } from '@/domain/user/repositories/user.repository.interface';
 import { QueryParamsDto } from '@/application/user/dto/query-params.dto';
 
@@ -34,6 +37,32 @@ export class UserRepository implements UserRepositoryInterface {
       return usersFound.map((e) => mapUserSchemaToEntity(e));
     } catch (error) {
       return [];
+    }
+  }
+
+  async getByEmail(userEmail: string): Promise<UserEntity | null> {
+    try {
+      const usersFound = await this.userCollection
+        .findOne({ email: userEmail })
+        .exec();
+      if (!usersFound) {
+        return null;
+      }
+      return mapUserSchemaToEntityWitPassword(usersFound);
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async getByUsername(username: string): Promise<UserEntity | null> {
+    try {
+      const usersFound = await this.userCollection.findOne({ username }).exec();
+      if (!usersFound) {
+        return null;
+      }
+      return mapUserSchemaToEntityWitPassword(usersFound);
+    } catch (error) {
+      return null;
     }
   }
 
