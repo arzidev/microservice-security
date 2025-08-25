@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from '@modules/database/database.module';
-import { UserController } from '@/application/user/controllers/user.controller';
-import { USER_REPOSITORY } from '@/domain/user/repositories/user.repository.interface';
-import { userUseCases } from '@/domain/user/use-cases';
-import { UserRepository } from '@/infrastructure/database/user/repositories/user.repository';
-import { repositories } from '@/infrastructure/database/user/repositories';
+import { UserController } from '@/modules/user/interface/controllers/user.controller';
+import { USER_REPOSITORY } from '@/modules/user/domain/repositories/user.repository.interface';
+import { UserRepository } from '@/modules/user/infrastructure/repositories/user.repository';
+import { repositories } from '@/modules/user/infrastructure/repositories';
+import { userUseCases } from './application/use-cases';
 
 @Module({
   imports: [DatabaseModule],
@@ -17,6 +17,6 @@ import { repositories } from '@/infrastructure/database/user/repositories';
       useClass: UserRepository,
     },
   ],
-  exports: [...userUseCases],
+  exports: [...userUseCases, USER_REPOSITORY],
 })
 export class UserModule {}

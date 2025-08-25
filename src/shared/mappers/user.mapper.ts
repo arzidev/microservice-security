@@ -1,9 +1,6 @@
-import { UserEntity } from '@domain/user/entities/user.entity';
-import { User } from '@/infrastructure/database/user/schemas/user.schema';
+import { UserEntity } from '@/modules/user/domain/entities/user.entity';
 
-export const mapUserSchemaToEntity = (
-  data: User & { _id: any },
-): UserEntity => ({
+export const mapUserSchemaToEntity = (data): UserEntity => ({
   id: data._id.toString(),
   email: data.email,
   username: data.username,
@@ -11,9 +8,7 @@ export const mapUserSchemaToEntity = (
   state: data.state,
 });
 
-export const mapUserSchemaToEntityWitPassword = (
-  data: User & { _id: any },
-): UserEntity => ({
+export const mapUserSchemaToEntityWitPassword = (data): UserEntity => ({
   id: data._id.toString(),
   email: data.email,
   username: data.username,
@@ -22,7 +17,7 @@ export const mapUserSchemaToEntityWitPassword = (
   password: data.password,
 });
 
-export const mapUserEntityToResponse = (data: UserEntity) => ({
+export const mapUserEntityToResponse = (data) => ({
   id: data.id ?? '',
   email: data.email,
   username: data.username,

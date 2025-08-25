@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import {
   User,
   UserSchema,
-} from '@/infrastructure/database/user/schemas/user.schema';
+} from '@/modules/user/infrastructure/schemas/user.schema';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 const collections = [{ name: User.name, schema: UserSchema }];
