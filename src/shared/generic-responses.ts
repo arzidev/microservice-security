@@ -18,8 +18,8 @@ export class GenericResponses {
     return response;
   }
 
-  public static GENERIC_SUCCESS(message: string, data?: any): Response<void> {
-    const response: Response<void> = {
+  public static GENERIC_SUCCESS<T>(message: string, data?: T): Response<T> {
+    const response: Response<T> = {
       code: HttpStatus.OK,
       message,
     };
@@ -43,21 +43,23 @@ export class GenericResponses {
     return response;
   }
 
-  public static GENERIC_FOUND_DATA(message: string, data: any): Response<void> {
-    const response: Response<void> = {
+  public static GENERIC_FOUND_DATA<T>(message: string, data: T): Response<T> {
+    const response: Response<T> = {
       code: HttpStatus.FOUND,
       message,
       data,
     };
+    if (data) response.data = data;
     return response;
   }
 
-  public static GENERIC_SAVE_SUCCESS(data: any): Response<void> {
-    const response: Response<void> = {
+  public static GENERIC_SAVE_SUCCESS<T>(data: T): Response<T> {
+    const response: Response<T> = {
       code: HttpStatus.OK,
       message: 'Se ha guardado de forma exitosa.',
       data,
     };
+    if (data) response.data = data;
     return response;
   }
 
@@ -77,12 +79,13 @@ export class GenericResponses {
     return response;
   }
 
-  public static GENERIC_UPDATE_SUCCESS_DATA(data?: any): Response<void> {
-    const response: Response<void> = {
+  public static GENERIC_UPDATE_SUCCESS_DATA<T>(data?: T): Response<T> {
+    const response: Response<T> = {
       code: HttpStatus.OK,
       message: 'Se ha actualizado de forma exitosa.',
       data,
     };
+    if (data) response.data = data;
     return response;
   }
 
