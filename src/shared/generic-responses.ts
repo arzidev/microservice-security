@@ -114,4 +114,12 @@ export class GenericResponses {
     };
     return response;
   }
+
+  public static GENERIC_UNAUTHORIZED(): Response<void> {
+    const response: Response<void> = {
+      code: HttpStatus.UNAUTHORIZED,
+      message: 'Bad credentials',
+    };
+    return response;
+  }
 }

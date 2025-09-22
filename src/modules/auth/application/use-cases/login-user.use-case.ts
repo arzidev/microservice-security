@@ -31,10 +31,10 @@ export class LoginUserUseCase {
       userData.password,
       user.password,
     );
+    console.log('aajnjnhfsdf', passwordMatched);
     if (!passwordMatched) {
       return null;
     }
-
     const payload = {
       sub: user.id,
       email: user.email,
