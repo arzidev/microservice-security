@@ -8,6 +8,6 @@ export class BcryptHasher implements IPasswordHasher {
     return bcrypt.hash(plain, this.saltRounds);
   }
   async compare(plain: string, hashed: string) {
-    return bcrypt.compare(hashed, plain);
+    return bcrypt.compare(plain, hashed);
   }
 }

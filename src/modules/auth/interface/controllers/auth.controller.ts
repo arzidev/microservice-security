@@ -31,6 +31,9 @@ export class AuthController {
   @Post('login')
   async login(@Body() loginUserDto: UserLoginInputDto) {
     const user = await this.loginUserUseCase.execute(loginUserDto);
+    if (!user) {
+      return GenericResponses.GENERIC_UNAUTHORIZED();
+    }
     return GenericResponses.GENERIC_SUCCESS(
       'Inicio de sessión correcto.',
       user,
