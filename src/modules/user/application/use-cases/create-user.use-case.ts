@@ -1,14 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateUserDto } from '@/modules/user/interface/dto/create-user.dto';
-import { GetUsersDto } from '@/modules/user/interface/dto/get-users.dto';
-import { Response } from '@/shared/models/response.model';
-import { mapUserEntityToResponse } from '@/shared/mappers/user.mapper';
-import { GenericResponses } from '@/shared/generic-responses';
-import { UserEntity } from '../../domain/entities/user.entity';
 import {
   USER_REPOSITORY,
   UserRepositoryInterface,
 } from '../../domain/repositories/user.repository.interface';
+import { UserOutputDto } from '../dto/user-output.dto';
+import { UserEntity } from '../../domain/entities/user.entity';
+import { UserMapper } from '@/modules/user/interface/mappers/user.mapper';
+import { CreateUserInputDto } from '../dto/create-user-input.dto';
 
 @Injectable()
 export class CreateUserUseCase {
@@ -17,19 +15,19 @@ export class CreateUserUseCase {
     private readonly userRepository: UserRepositoryInterface,
   ) {}
 
-  async execute(
-    userData: CreateUserDto,
-  ): Promise<Response<GetUsersDto | void>> {
-    const newUser: Partial<UserEntity> = {
+  async execute(userData: CreateUserInputDto): Promise<UserOutputDto | null> {
+    const newUser = new UserEntity({
       username: userData.username,
       email: userData.email,
       password: userData.password,
-    };
+      roles: ['user'],
+      state: 'activo',
+      permissions: [],
+    });
     const inserted = await this.userRepository.insert(newUser);
     if (!inserted) {
-      return GenericResponses.GENERIC_SAVE_FAILED();
+      return null;
     }
-    const mappedData = mapUserEntityToResponse(inserted);
-    return GenericResponses.GENERIC_SAVE_SUCCESS(mappedData);
+    return UserMapper.toPublicDto(inserted);
   }
 }

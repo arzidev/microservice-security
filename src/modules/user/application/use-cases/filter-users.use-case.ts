@@ -1,14 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { GenericResponses } from '@/shared/generic-responses';
-import { GetUsersDto } from '@/modules/user/interface/dto/get-users.dto';
-import { Response } from '@/shared/models/response.model';
-import { mapUserEntityToResponse } from '@/shared/mappers/user.mapper';
-import { QueryParamsDto } from '@/modules/user/interface/dto/query-params.dto';
+import { QueryParamsInputDto } from '@/modules/user/application/dto/query-params-input.dto';
 import {
   USER_REPOSITORY,
   UserRepositoryInterface,
 } from '../../domain/repositories/user.repository.interface';
 import { UserEntity } from '../../domain/entities/user.entity';
+import { UserOutputDto } from '../dto/user-output.dto';
+import { UserMapper } from '@/modules/user/interface/mappers/user.mapper';
 
 @Injectable()
 export class FilterUsersUseCase {
@@ -17,9 +15,7 @@ export class FilterUsersUseCase {
     private readonly userRepository: UserRepositoryInterface,
   ) {}
 
-  async execute(
-    params?: QueryParamsDto,
-  ): Promise<Response<GetUsersDto[] | void>> {
+  async execute(params?: QueryParamsInputDto): Promise<UserOutputDto[] | null> {
     let data: UserEntity[];
     if (params && Object.keys(params).length > 0) {
       data = await this.userRepository.search(params);
@@ -27,14 +23,10 @@ export class FilterUsersUseCase {
       data = await this.userRepository.getAll();
     }
     if (data.length == 0) {
-      return GenericResponses.GENERIC_NOT_FOUND('No se encontraron datos');
+      return null;
     }
-    const dataFormated: GetUsersDto[] = data.map((e) =>
-      mapUserEntityToResponse(e),
-    );
-    return GenericResponses.GENERIC_FOUND_DATA(
-      'Se encontraron datos',
-      dataFormated,
-    );
+    return data.map((e) => {
+      return UserMapper.toPublicDto(e);
+    });
   }
 }

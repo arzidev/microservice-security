@@ -1,16 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
-
-import { GetUsersDto } from '@/modules/user/interface/dto/get-users.dto';
-
-import { Response } from '@/shared/models/response.model';
-import { mapUserEntityToResponse } from '@/shared/mappers/user.mapper';
-import { GenericResponses } from '@/shared/generic-responses';
-import { UpdateUserDto } from '@/modules/user/interface/dto/update-user.dto';
+import { UpdateUserInputDto } from '@/modules/user/application/dto/update-user-input.dto';
 import { UserEntity } from '../../domain/entities/user.entity';
 import {
   USER_REPOSITORY,
   UserRepositoryInterface,
 } from '../../domain/repositories/user.repository.interface';
+import { UserOutputDto } from '../dto/user-output.dto';
+import { UserMapper } from '@/modules/user/interface/mappers/user.mapper';
 
 @Injectable()
 export class UpdateUserUseCase {
@@ -21,18 +17,20 @@ export class UpdateUserUseCase {
 
   async execute(
     userId: string,
-    userData: UpdateUserDto,
-  ): Promise<Response<GetUsersDto | void>> {
-    const newData: Partial<UserEntity> = {
-      username: userData.username,
-      email: userData.email,
-      role: userData.role,
-    };
-    const inserted = await this.userRepository.update(userId, newData);
-    if (!inserted) {
-      return GenericResponses.GENERIC_SAVE_FAILED();
+    userData: UpdateUserInputDto,
+  ): Promise<UserOutputDto | null> {
+    const userFound = await this.userRepository.getById(userId);
+    if (!userFound) {
+      return null;
     }
-    const mappedData = mapUserEntityToResponse(inserted);
-    return GenericResponses.GENERIC_SAVE_SUCCESS(mappedData);
+    const newData: Partial<UserEntity> = {
+      ...(userData.email && { email: userData.email }),
+      ...(userData.username && { username: userData.username }),
+    };
+    const userUpdated = await this.userRepository.update(userId, newData);
+    if (!userUpdated) {
+      return null;
+    }
+    return UserMapper.toPublicDto(userUpdated);
   }
 }
