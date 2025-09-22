@@ -14,11 +14,11 @@ export class User extends Document {
   username: string;
 
   @Prop({
-    type: String,
+    type: [String],
     enum: UserRole,
-    default: UserRole.USER,
+    default: [UserRole.USER],
   })
-  role: string;
+  roles: string[];
 
   @Prop({
     type: String,

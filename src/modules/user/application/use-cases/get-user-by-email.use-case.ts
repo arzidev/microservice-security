@@ -3,7 +3,8 @@ import {
   USER_REPOSITORY,
   UserRepositoryInterface,
 } from '../../domain/repositories/user.repository.interface';
-import { UserEntity } from '../../domain/entities/user.entity';
+import { UserOutputDto } from '../dto/user-output.dto';
+import { UserMapper } from '@/modules/user/interface/mappers/user.mapper';
 
 @Injectable()
 export class GetUserByEmailUseCase {
@@ -12,11 +13,11 @@ export class GetUserByEmailUseCase {
     private readonly userRepository: UserRepositoryInterface,
   ) {}
 
-  async execute(userEmail: string): Promise<UserEntity | null> {
+  async execute(userEmail: string): Promise<UserOutputDto | null> {
     const data = await this.userRepository.getByEmail(userEmail);
     if (!data) {
       return null;
     }
-    return data;
+    return UserMapper.toPublicDto(data);
   }
 }
