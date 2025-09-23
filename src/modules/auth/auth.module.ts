@@ -4,17 +4,18 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from '@/modules/auth/interface/controllers/auth.controller';
 import { UserModule } from '../user/user.module';
 import { userUseCases } from '../user/application/use-cases';
-import { RoleRepository } from './infrastructure/respositories/role.repository';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from '@/shared/auth/strategies/jwt-strategy';
 import { authUseCases } from './application/use-cases';
-import { PASSWORD_HASHER, ROLE_REPOSITORY } from './domain/tokens';
 import { BcryptHasher } from './infrastructure/hashers/bcrypt-hasher';
+import { RoleModule } from '../role/role.module';
+import { PASSWORD_HASHER } from '@/shared/tokens';
 
 @Module({
   imports: [
     DatabaseModule,
     UserModule,
+    RoleModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: 'secreto',
@@ -29,14 +30,10 @@ import { BcryptHasher } from './infrastructure/hashers/bcrypt-hasher';
     ...authUseCases,
     ...userUseCases,
     {
-      provide: ROLE_REPOSITORY,
-      useClass: RoleRepository,
-    },
-    {
       provide: PASSWORD_HASHER,
       useClass: BcryptHasher,
     },
   ],
-  exports: [ROLE_REPOSITORY, JwtModule, PassportModule, JwtStrategy],
+  exports: [JwtModule, PassportModule, JwtStrategy],
 })
 export class AuthModule {}

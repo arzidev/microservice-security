@@ -1,6 +1,6 @@
-import { RoleRepositoryInterface } from '@/modules/auth/domain/repositories/role.repository.interface';
-import { ROLE_REPOSITORY } from '@/modules/auth/domain/tokens';
+import { RoleRepositoryInterface } from '@/modules/role/domain/repositories/role.repository.interface';
 import { GetUserByIdUseCase } from '@/modules/user/application/use-cases';
+import { ROLE_REPOSITORY } from '@/shared/tokens';
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';

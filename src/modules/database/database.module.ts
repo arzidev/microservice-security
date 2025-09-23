@@ -8,12 +8,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import {
   Permission,
   PermissionSchema,
-} from '../auth/infrastructure/schemas/permission.schema';
-import { Role, RoleSchema } from '../auth/infrastructure/schemas/role.schema';
+} from '../role/infrastructure/schemas/permission.schema';
+import { Role, RoleSchema } from '../role/infrastructure/schemas/role.schema';
 import {
   Module as ModuleModel,
   ModuleSchema,
-} from '../auth/infrastructure/schemas/module.schema';
+} from '../role/infrastructure/schemas/module.schema';
 
 const collections = [
   { name: User.name, schema: UserSchema },

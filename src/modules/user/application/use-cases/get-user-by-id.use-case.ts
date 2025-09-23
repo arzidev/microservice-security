@@ -1,10 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import {
-  USER_REPOSITORY,
-  UserRepositoryInterface,
-} from '../../domain/repositories/user.repository.interface';
+import { UserRepositoryInterface } from '../../domain/repositories/user.repository.interface';
 import { UserOutputDto } from '../dto/user-output.dto';
 import { UserMapper } from '@/modules/user/interface/mappers/user.mapper';
+import { USER_REPOSITORY } from '@/shared/tokens';
 
 @Injectable()
 export class GetUserByIdUseCase {

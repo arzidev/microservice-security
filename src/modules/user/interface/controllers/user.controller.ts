@@ -19,7 +19,6 @@ import { GenericResponses } from '@/shared/generic-responses';
 import { isValidObjectId } from 'mongoose';
 import { Permissions } from '@/shared/auth/decorator/permissions.decorator';
 import { JwtAuthGuard } from '@/shared/auth/guards/jwt-auth.guard';
-import { CreateUserRequestDto } from '../dto/create-user-request.dto';
 import { UpdateUserRequestDto } from '../dto/update-user-request.dto';
 import { QueryParamsRequestDto } from '../dto/query-params-request.dto';
 import { Response } from '@/shared/models/response.model';
@@ -37,6 +36,7 @@ export class UserController {
   ) {}
 
   @Get(':id')
+  @Permissions('VIEW_USER')
   async getUserById(
     @Param('id') id: string,
   ): Promise<Response<UserOutputDto | void>> {
@@ -74,6 +74,7 @@ export class UserController {
   }
 
   @Patch(':id')
+  @Permissions('EDIT_USER')
   async updateUser(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserRequestDto,
@@ -90,6 +91,7 @@ export class UserController {
   }
 
   @Patch(':id/activate')
+  @Permissions('EDIT_USER')
   async activate(
     @Param('id') id: string,
   ): Promise<Response<UserOutputDto | void>> {
@@ -105,6 +107,7 @@ export class UserController {
   }
 
   @Patch(':id/deactivate')
+  @Permissions('EDIT_USER')
   async deactivate(
     @Param('id') id: string,
   ): Promise<Response<UserOutputDto | void>> {

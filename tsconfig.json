@@ -23,9 +23,6 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@/*": ["src/*"],
-      "@domain/*": ["src/domain/*"],
-      "@infrastructure/*": ["src/infrastructure/*"],
-      "@application/*": ["src/application/*"],
       "@modules/*": ["src/modules/*"],
       "@config/*": ["src/config/*"],
       "@shared/*": ["src/shared/*"],

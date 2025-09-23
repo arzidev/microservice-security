@@ -1,14 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { UserLoginOutputDto } from '../dto/auth/user-login-output.dto';
 import { UserLoginInputDto } from '../dto/auth/user-login-input.dto';
-import {
-  USER_REPOSITORY,
-  UserRepositoryInterface,
-} from '@/modules/user/domain/repositories/user.repository.interface';
-import { PASSWORD_HASHER } from '../../domain/tokens';
+import { UserRepositoryInterface } from '@/modules/user/domain/repositories/user.repository.interface';
 import { IPasswordHasher } from '../../domain/hashers/password-hasher.interface';
+import { PASSWORD_HASHER, USER_REPOSITORY } from '@/shared/tokens';
 
 @Injectable()
 export class LoginUserUseCase {
