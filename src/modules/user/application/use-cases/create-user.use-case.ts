@@ -1,12 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import {
-  USER_REPOSITORY,
-  UserRepositoryInterface,
-} from '../../domain/repositories/user.repository.interface';
+import { UserRepositoryInterface } from '../../domain/repositories/user.repository.interface';
 import { UserOutputDto } from '../dto/user-output.dto';
 import { UserEntity } from '../../domain/entities/user.entity';
 import { UserMapper } from '@/modules/user/interface/mappers/user.mapper';
 import { CreateUserInputDto } from '../dto/create-user-input.dto';
+import { USER_REPOSITORY } from '@/shared/tokens';
 
 @Injectable()
 export class CreateUserUseCase {

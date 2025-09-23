@@ -1,12 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { QueryParamsInputDto } from '@/modules/user/application/dto/query-params-input.dto';
-import {
-  USER_REPOSITORY,
-  UserRepositoryInterface,
-} from '../../domain/repositories/user.repository.interface';
+import { UserRepositoryInterface } from '../../domain/repositories/user.repository.interface';
 import { UserEntity } from '../../domain/entities/user.entity';
 import { UserOutputDto } from '../dto/user-output.dto';
 import { UserMapper } from '@/modules/user/interface/mappers/user.mapper';
+import { USER_REPOSITORY } from '@/shared/tokens';
 
 @Injectable()
 export class FilterUsersUseCase {

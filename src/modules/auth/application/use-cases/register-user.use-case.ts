@@ -3,8 +3,8 @@ import { UserRegisterOutputDto } from '../dto/auth/user-register-output.dto';
 import { UserRegisterInputDto } from '../dto/auth/user-register-input.dto';
 import { CreateUserUseCase } from '@/modules/user/application/use-cases';
 import { IPasswordHasher } from '../../domain/hashers/password-hasher.interface';
-import { PASSWORD_HASHER } from '../../domain/tokens';
 import { CreateUserInputDto } from '@/modules/user/application/dto/create-user-input.dto';
+import { PASSWORD_HASHER } from '@/shared/tokens';
 
 @Injectable()
 export class RegisterUserUseCase {
