@@ -23,7 +23,9 @@ import { UpdateUserRequestDto } from '../dto/update-user-request.dto';
 import { QueryParamsRequestDto } from '../dto/query-params-request.dto';
 import { Response } from '@/shared/models/response.model';
 import { UserOutputDto } from '../../application/dto/user-output.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth('access-token')
 @UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UserController {
@@ -55,7 +57,7 @@ export class UserController {
   }
 
   @Get()
-  @Permissions('VIEW_USER')
+  @Permissions('VIEW_USERS')
   async getAllUsers(
     @Query() params: QueryParamsRequestDto,
   ): Promise<Response<UserOutputDto[] | void>> {
