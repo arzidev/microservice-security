@@ -101,8 +101,7 @@ export class UserRepository implements UserRepositoryInterface {
       if (!userFound) {
         return null;
       }
-      console.log('userfound', userFound);
-      const entidad = new UserEntity({
+      return new UserEntity({
         id: userFound._id as string,
         email: userFound.email,
         username: userFound.username,
@@ -110,8 +109,6 @@ export class UserRepository implements UserRepositoryInterface {
         state: userFound.state,
         password: userFound.password,
       });
-      console.log('entidad', entidad);
-      return entidad;
     } catch (error) {
       console.log(error);
       return null;

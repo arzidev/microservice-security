@@ -15,7 +15,7 @@ export class FilterUsersUseCase {
 
   async execute(params?: QueryParamsInputDto): Promise<UserOutputDto[] | null> {
     let data: UserEntity[];
-    if (params && Object.keys(params).length > 0) {
+    if (params && Object.values(params).some((v) => v !== undefined)) {
       data = await this.userRepository.search(params);
     } else {
       data = await this.userRepository.getAll();

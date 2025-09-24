@@ -64,7 +64,6 @@ export class RoleRepository implements RoleRepositoryInterface {
         select: 'code name',
       })
       .exec();
-    console.log('buscando', filters);
     return rolesFound.map(
       (e) =>
         new RoleEntity({
@@ -74,6 +73,91 @@ export class RoleRepository implements RoleRepositoryInterface {
           permissions: e.permissions.map((e) => e.code),
         }),
     );
+  }
+
+  async getById(roleId: string): Promise<RoleEntity | null> {
+    try {
+      const roleFound = await this.roleCollection
+        .findById(roleId)
+        .populate({
+          path: 'permissions',
+          select: 'code name',
+        })
+        .exec();
+      if (!roleFound) {
+        return null;
+      }
+      return new RoleEntity({
+        id: roleFound._id as string,
+        code: roleFound.code,
+        name: roleFound.name,
+        permissions: roleFound.permissions.map((e) => e.code),
+      });
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+
+  async insert(roleData: Partial<RoleEntity>): Promise<RoleEntity | null> {
+    try {
+      const newRole = new this.roleCollection({
+        code: roleData.code,
+        name: roleData.name,
+        permissions: [],
+      });
+      const saved = await newRole.save();
+      return new RoleEntity({
+        id: saved._id as string,
+        code: saved.code,
+        name: saved.name,
+        permissions: saved.permissions.map((e) => e.code),
+      });
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+
+  async update(
+    roleId: string,
+    roleData: Partial<RoleEntity>,
+  ): Promise<RoleEntity | null> {
+    try {
+      const dataToUpdate: Record<string, any> = {};
+      if (roleData.code && roleData.code.trim() !== '') {
+        dataToUpdate.code = roleData.code;
+      }
+
+      if (roleData.name && roleData.name.trim() !== '') {
+        dataToUpdate.name = roleData.name;
+      }
+      if (Object.keys(dataToUpdate).length === 0) {
+        throw new Error('No hay datos válidos para actualizar');
+      }
+      const roleUpdated = await this.roleCollection
+        .findByIdAndUpdate(
+          roleId,
+          {
+            $set: dataToUpdate,
+          },
+          { new: true },
+        )
+        .exec();
+
+      if (!roleUpdated) {
+        return null;
+      }
+      return new RoleEntity({
+        id: roleUpdated._id as string,
+        code: roleUpdated.code,
+        name: roleUpdated.name,
+        permissions: roleUpdated.permissions.map((e) => e.code),
+      });
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   }
 
   // async populateCollections() {

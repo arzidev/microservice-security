@@ -13,15 +13,20 @@ export class FilterRolesUseCase {
   ) {}
 
   async execute(params?: QueryParamsInputDto): Promise<RoleOutputDto[] | null> {
-    let data: RoleEntity[];
-    if (params && Object.keys(params).length > 0) {
-      data = await this.roleRepository.search(params);
+    let rolesFound: RoleEntity[];
+    if (params && Object.values(params).some((v) => v !== undefined)) {
+      rolesFound = await this.roleRepository.search(params);
     } else {
-      data = await this.roleRepository.getAll();
+      rolesFound = await this.roleRepository.getAll();
     }
-    if (data.length == 0) {
+    if (rolesFound.length == 0) {
       return null;
     }
-    return data;
+    return rolesFound.map((e) => ({
+      id: e.id,
+      code: e.code,
+      name: e.name,
+      permissions: e.permissions ?? [],
+    }));
   }
 }
