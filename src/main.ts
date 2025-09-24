@@ -12,7 +12,7 @@ async function bootstrap() {
       transform: true, // ✅ convierte datos a las clases DTO
     }),
   );
-  await app.listen(process.env.PORT ?? 3100);
+  await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap().catch((error) => {
   console.error('Error starting application:', error);
